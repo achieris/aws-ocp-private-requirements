@@ -16,6 +16,13 @@
     tenancy: default
     state: present
   register: vpc_result
+ 
+- name: create a private zone
+  amazon.aws.route53_zone:
+    zone: "{{ base_domain }}"
+    vpc_id: "{{ vpc_result.vpc.id }}"
+    vpc_region: "{{ vpc.aws_vpc_region }}"
+  register: route53_zone
 
 - name: Create private subnets
   amazon.aws.ec2_vpc_subnet:
@@ -114,23 +121,14 @@
     tags:
       Name: default_nat_gateway
   register: nat_gateway
-
-- name: Wait for nat gateway available
-  amazon.aws.ec2_vpc_nat_gateway_info:
-    region: "{{ vpc.aws_vpc_region }}"
-    filters:
-      state: ['available']
-  register: nat_gateway_status    
-  until: nat_gateway_status.result[0].state=="available" 
-  retries: 10
-  delay: 10
-
+- wait_for: 
+    timeout: 120
 - name: Setup subnet route table
   amazon.aws.ec2_vpc_route_table:
     vpc_id: "{{ vpc_result.vpc.id }}"
     region: "{{ vpc.aws_vpc_region }}"
     tags:
-      Name: "Privatei-{{ item.subnet.id }}"
+      Name: "Private-{{ item.subnet.id }}"
     subnets:
       - "{{ item.subnet.id }}"
     routes:

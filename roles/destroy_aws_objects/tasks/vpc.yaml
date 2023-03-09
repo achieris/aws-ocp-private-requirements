@@ -1,0 +1,6 @@
+- name: "Delete vpc"
+  ec2_vpc_net:
+    region: "{{ vpc.aws_vpc_region }}"
+    name: "{{ vpc.aws_vpc_name }}"
+    cidr_block: "{{ vpc_info.vpcs[0].cidr_block }}"
+    state: "absent"

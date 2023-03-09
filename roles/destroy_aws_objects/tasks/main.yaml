@@ -1,0 +1,14 @@
+- name: "Query for existing vpc by name ({{ vpc.aws_vpc_name }})"
+  ec2_vpc_net_info:
+    region: "{{ vpc.aws_vpc_region }}"
+    filters:
+      "tag:Name": "{{ vpc.aws_vpc_name }}"
+  register: vpc_info
+
+- import_tasks: "ec2.yaml"
+- import_tasks: "nat_gateway.yaml"
+- import_tasks: "endpoints.yaml"
+- import_tasks: "route_tables.yaml"
+- import_tasks: "internet_gateway.yaml"
+- import_tasks: "subnets.yaml"
+- import_tasks: "vpc.yaml"

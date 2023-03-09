@@ -1,0 +1,27 @@
+- name: "List endpoint"
+  amazon.aws.ec2_vpc_endpoint_info:
+   region: "{{ vpc.aws_vpc_region }}"
+   filters:
+     vpc-id: "{{ vpc_info.vpcs[0].vpc_id }}"
+  register: endpoint
+
+- name: "Delete endpoint"
+  amazon.aws.ec2_vpc_endpoint:
+    region: "{{ vpc.aws_vpc_region }}"
+    vpc_id: "{{ vpc_info.vpcs[0].vpc_id }}"
+    state: "absent"
+    vpc_endpoint_id: "{{ item.vpc_endpoint_id }}"
+    purge_tags: yes
+  with_items: "{{ endpoint.vpc_endpoints }}"
+
+- wait_for:
+    timeout: 120
+
+- name: "Delete eni"
+  amazon.aws.ec2_eni:
+    region: "{{ vpc.aws_vpc_region }}"
+    state: "absent"
+    eni_id: "{{ item.network_interface_ids }}"
+  with_items: "{{ endpoint.vpc_endpoints }}"
+  ignore_errors: true
+

@@ -1,0 +1,14 @@
+- name: "Query for any existing subnet(s)"
+  ec2_vpc_subnet_info:
+    region: "{{ vpc.aws_vpc_region }}"
+    filters:
+      vpc-id: "{{ vpc_info.vpcs[0].vpc_id }}"
+  register: subnet_info
+
+- name: "Delete subnets"
+  ec2_vpc_subnet:
+    region: "{{ vpc.aws_vpc_region }}"
+    vpc_id: "{{ vpc_info.vpcs[0].vpc_id }}"
+    cidr: "{{ item.cidr_block }}"
+    state: "absent"
+  with_items: "{{ subnet_info.subnets }}"

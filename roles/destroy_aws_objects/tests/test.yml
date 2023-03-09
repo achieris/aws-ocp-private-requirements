@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - destroy_aws_objects
+    - create_aws_objects

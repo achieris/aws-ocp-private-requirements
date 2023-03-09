@@ -1,0 +1,8 @@
+- name: Terminate every running instance in the vpc
+  amazon.aws.ec2_instance:
+    region: "{{ vpc.aws_vpc_region }}"
+    state: absent
+    network:
+      delete_on_termination: true
+    filters:
+      vpc-id: "{{ vpc_info.vpcs[0].vpc_id }}"

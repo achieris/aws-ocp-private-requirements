@@ -1,2 +1,4 @@
----
-# vars file for destroy_aws_objects
+vpc:
+  aws_vpc_name: "example-vpc-1"
+  aws_vpc_region: "eu-central-1"
+
