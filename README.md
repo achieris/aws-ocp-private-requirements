@@ -25,7 +25,7 @@ botocore
 ```
 
 
-Role Variables
+create_aws_objects role variables
 --------------
 In create_aws_objects/vars/main.yml
 
@@ -58,7 +58,7 @@ vpc:
 
 ```
 
-Create the objects
+use create_aws_objects role
 ----------------
 
 Export enviroment variables with AWS credentials:
@@ -67,7 +67,35 @@ export AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
 ```
 
+
 Run ansible:
 ```sh
-ansible-playbook site.yaml 
+ansible-playbook create_objects.yaml
 ```
+
+destroy_aws_objects role variables
+--------------
+In destroy_aws_objects/vars/main.yml
+
+```sh
+vpc:
+  aws_vpc_name: "example-vpc-1"
+  aws_vpc_region: "eu-central-1"
+
+```
+
+use destroy_aws_objects role
+----------------
+
+Export enviroment variables with AWS credentials:
+```sh
+export AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
+```
+
+
+Run ansible:
+```sh
+ansible-playbook destroy_objects.yaml
+```
+

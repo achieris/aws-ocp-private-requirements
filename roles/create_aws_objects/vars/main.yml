@@ -1,5 +1,5 @@
 ssh_key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDfO6CeyMAzTwZy/SLlb8aao7xdXrtuNMowf+eVjhsmrkapwOYI2ULSGk9YFxo1i6iq8iPHCgfvj4+IxdUQEeGgRZVbMIqoXQtQ1dyp9IbjgOYwswUnN/QyE54gZ8mdX5qrpzbM15FUhoDR5HItQggzvDyIR3gc+BoJfk7/8ew8TzvzLG1soLBw+byv40K5dg0I3nANvjXOFD+zm/9bhZTnJR8ePpw7mAcWUw64uupyTO8yTSlfMsYFeWyvO5jxEs3Z89eVsh9y8Lr/sGyBhH7FqVlx6qCpGyVT70nAGZWAdZGj4ANtKMTB/Tp728NSQdnUJV2jZQ+KbKoIoz88coA3BD9D1HrbYB7C/MMFyAfjg7zMN1pn5knBYlCqtN1DneLS2g2F4AccRw+dh+qSzyc0aeLzuUMfAh4fkuzoIUxyUOydASweY6rIkZCLo9xBpluyyk28G/51xK9jfltWv18fcJ7NWBzz2goZnVtN9oDYtEPwTUpM5JlGInHEP7R/hic= achieris@achieris.remote.csb'
-
+base_domain: test.internal
 vpc:
   aws_vpc_name: "example-vpc-1"
   aws_vpc_region: "eu-central-1"
