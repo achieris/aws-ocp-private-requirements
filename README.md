@@ -9,8 +9,12 @@ The role create_aws_objects creates:
  - 1 NAT GATEWAY
  - 1 public subnet 
  - 2 route tables
+ - 1 route53 private zone
  - 3 VPC endpoints
  - 1 security group (Open ports are 80, 443, 22 for world and all traffic for VPC cidr).
+
+The role destroy_aws_objects all the previously listed resources.
+
 
 Requirements
 ------------
