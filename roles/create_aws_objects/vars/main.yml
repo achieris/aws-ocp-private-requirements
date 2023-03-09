@@ -6,7 +6,7 @@ vpc:
   aws_vpc_az_a: "eu-central-1a"
   aws_vpc_az_b: "eu-central-1b"
   aws_vpc_az_c: "eu-central-1c"
-  aws_vpc_cidrblock: "10.26.0.0/24"
+  aws_vpc_cidrblock: "10.26.0.0/23"
  
   private_subnets: 
   - az: "eu-central-1a"
@@ -23,3 +23,9 @@ vpc:
   - az: "eu-central-1a"
     name: public-subnet-a
     cidr: 10.26.0.192/26
+  - az: "eu-central-1b"
+    name: public-subnet-b
+    cidr: 10.26.1.0/26  
+  - az: "eu-central-1c"
+    name: public-subnet-c
+    cidr: 10.26.1.64/26

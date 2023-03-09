@@ -17,12 +17,12 @@
     state: present
   register: vpc_result
  
-- name: create a private zone
-  amazon.aws.route53_zone:
-    zone: "{{ base_domain }}"
-    vpc_id: "{{ vpc_result.vpc.id }}"
-    vpc_region: "{{ vpc.aws_vpc_region }}"
-  register: route53_zone
+  #- name: create a private zone
+  #  amazon.aws.route53_zone:
+  #    zone: "{{ base_domain }}"
+  #    vpc_id: "{{ vpc_result.vpc.id }}"
+  #    vpc_region: "{{ vpc.aws_vpc_region }}"
+  #  register: route53_zone
 
 - name: Create private subnets
   amazon.aws.ec2_vpc_subnet:
@@ -64,7 +64,7 @@
     vpc_id: "{{ vpc_result.vpc.id }}"
     region: "{{ vpc.aws_vpc_region }}"
     tags:
-      Name: Public
+      Name: "Public-{{ item.subnet.id }}"
     subnets: 
       - "{{ item.subnet.id }}"
     routes:
@@ -74,28 +74,28 @@
   with_items: "{{ public_subnet_result.results }}"
   register: rt_result
 
-- name: Default SG for prod subnet
-  amazon.aws.ec2_security_group:
-    name: default
-    description: default sg group
-    vpc_id: "{{ vpc_result.vpc.id }}"
-    region: "{{ vpc.aws_vpc_region }}"
-    rules:
-      - proto: tcp
-        from_port: 80
-        to_port: 80
-        cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 22
-        to_port: 22
-        cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 443
-        to_port: 443
-        cidr_ip: 0.0.0.0/0
-      - proto: all
-        cidr_ip: "{{ vpc.aws_vpc_cidrblock }}"
-  register: sg_default 
+  #- name: Default SG for prod subnet
+  #  amazon.aws.ec2_security_group:
+  #    name: default
+  #    description: default sg group
+  #    vpc_id: "{{ vpc_result.vpc.id }}"
+  #    region: "{{ vpc.aws_vpc_region }}"
+  #    rules:
+  #      - proto: tcp
+  #        from_port: 80
+  #        to_port: 80
+  #        cidr_ip: 0.0.0.0/0
+  #      - proto: tcp
+  #        from_port: 22
+  #        to_port: 22
+  #        cidr_ip: 0.0.0.0/0
+  #      - proto: tcp
+  #        from_port: 443
+  #        to_port: 443
+  #        cidr_ip: 0.0.0.0/0
+  #      - proto: all
+  #        cidr_ip: "{{ vpc.aws_vpc_cidrblock }}"
+  #  register: sg_default 
 
 
 - name: start bastion 
@@ -121,8 +121,10 @@
     tags:
       Name: default_nat_gateway
   register: nat_gateway
+
 - wait_for: 
-    timeout: 120
+    timeout: 60
+
 - name: Setup subnet route table
   amazon.aws.ec2_vpc_route_table:
     vpc_id: "{{ vpc_result.vpc.id }}"
