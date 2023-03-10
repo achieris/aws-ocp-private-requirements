@@ -1,4 +1,4 @@
-- name: "Delete vpc"
+- name: "Delete the vpc"
   ec2_vpc_net:
     region: "{{ vpc.aws_vpc_region }}"
     name: "{{ vpc.aws_vpc_name }}"

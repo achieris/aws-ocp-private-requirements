@@ -5,7 +5,7 @@
       vpc-id: "{{ vpc_info.vpcs[0].vpc_id }}"
   register: nat_gateways
 
-- name: "Delete nat gateway and release EIP"
+- name: "Delete the nat gateways and release the EIPs"
   ec2_vpc_nat_gateway:
     region: "{{ vpc.aws_vpc_region }}"
     nat_gateway_id: "{{ item.nat_gateway_id }}"

@@ -1,11 +1,11 @@
-- name: "List endpoint"
+- name: "List the endpoints"
   amazon.aws.ec2_vpc_endpoint_info:
    region: "{{ vpc.aws_vpc_region }}"
    filters:
      vpc-id: "{{ vpc_info.vpcs[0].vpc_id }}"
   register: endpoint
 
-- name: "Delete endpoint"
+- name: "Delete the endpoints"
   amazon.aws.ec2_vpc_endpoint:
     region: "{{ vpc.aws_vpc_region }}"
     vpc_id: "{{ vpc_info.vpcs[0].vpc_id }}"
@@ -17,7 +17,7 @@
 - wait_for:
     timeout: 120
 
-- name: "Delete eni"
+- name: "Delete the enis"
   amazon.aws.ec2_eni:
     region: "{{ vpc.aws_vpc_region }}"
     state: "absent"

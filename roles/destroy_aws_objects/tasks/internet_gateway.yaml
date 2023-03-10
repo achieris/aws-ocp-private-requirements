@@ -1,4 +1,4 @@
-- name: "Delete internet gateway"
+- name: "Delete the internet gateway"
   ec2_vpc_igw:
     region: "{{ vpc.aws_vpc_region }}"
     vpc_id: "{{ item.vpc_id }}"

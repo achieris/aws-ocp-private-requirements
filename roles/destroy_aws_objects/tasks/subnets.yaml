@@ -5,7 +5,7 @@
       vpc-id: "{{ vpc_info.vpcs[0].vpc_id }}"
   register: subnet_info
 
-- name: "Delete subnets"
+- name: "Delete the subnets"
   ec2_vpc_subnet:
     region: "{{ vpc.aws_vpc_region }}"
     vpc_id: "{{ vpc_info.vpcs[0].vpc_id }}"

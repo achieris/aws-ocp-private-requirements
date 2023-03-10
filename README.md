@@ -1,17 +1,17 @@
 aws-ocp-requirements
 =========
 
-Ansible roles to create the required objects to install a private OCP cluster on AWS. 
+This project contains two Ansible roles to create the required objects to install a private OCP cluster on AWS and to delete these objects. 
+ 
 The role create_aws_objects creates:
  - AWS VPC
  - 1 private subnet in each az of the selected region
  - 1 IGW
  - 1 NAT GATEWAY
- - 1 public subnet 
- - 2 route tables
- - 1 route53 private zone
+ - 1 public subnet in each az of the selected region 
+ - 6 route tables
  - 3 VPC endpoints
- - 1 security group (Open ports are 80, 443, 22 for world and all traffic for VPC cidr).
+ - 1 default security group ( 22 for world and all traffic for VPC cidr).
 
 The role destroy_aws_objects deletes all the previously listed resources.
 

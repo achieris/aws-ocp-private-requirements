@@ -13,7 +13,7 @@
 
 - pause: seconds=30
 
-- name: "Purge routes"
+- name: "Purge the route tables"
   ec2_vpc_route_table:
     region: "{{ vpc.aws_vpc_region }}"
     vpc_id: "{{ vpc_info.vpcs[0].vpc_id }}"
@@ -27,7 +27,7 @@
 
 - pause: seconds=30
 
-- name: "Delete route table"
+- name: "Delete the route tables"
   ec2_vpc_route_table:
     region: "{{ vpc.aws_vpc_region }}"
     vpc_id: "{{ vpc_info.vpcs[0].vpc_id }}"

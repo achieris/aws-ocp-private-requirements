@@ -1,14 +1,11 @@
 ---
-
-
-- name: create key pair using provided key_material
+- name: "Create an ssh key pair using provided key_material"
   amazon.aws.ec2_key:
     name: ssh_key
     key_material: "{{ ssh_key }}"
     region: "{{ vpc.aws_vpc_region }}"
 
-
-- name: Create project VPC
+- name: "Create the VPC"
   amazon.aws.ec2_vpc_net:
     name: "{{ vpc.aws_vpc_name }}"
     cidr_block: "{{ vpc.aws_vpc_cidrblock }}"
@@ -16,15 +13,8 @@
     tenancy: default
     state: present
   register: vpc_result
- 
-  #- name: create a private zone
-  #  amazon.aws.route53_zone:
-  #    zone: "{{ base_domain }}"
-  #    vpc_id: "{{ vpc_result.vpc.id }}"
-  #    vpc_region: "{{ vpc.aws_vpc_region }}"
-  #  register: route53_zone
 
-- name: Create private subnets
+- name: "Create the private subnets"
   amazon.aws.ec2_vpc_subnet:
     region: "{{ vpc.aws_vpc_region }}"
     state: present
@@ -37,8 +27,7 @@
   with_items: "{{ vpc.private_subnets }}"
   register: private_subnet_result
 
-
-- name: Create public subnets
+- name: "Create the public subnets"
   amazon.aws.ec2_vpc_subnet:
     region: "{{ vpc.aws_vpc_region }}"
     state: present
@@ -51,15 +40,14 @@
   with_items: "{{ vpc.public_subnets }}"
   register: public_subnet_result
 
-
-- name: Create igw
+- name: "Create the igw"
   amazon.aws.ec2_vpc_igw:
     region: "{{ vpc.aws_vpc_region }}"
     vpc_id: "{{ vpc_result.vpc.id }}"
     state: present
   register: igw_result
 
-- name: Setup subnet route table
+- name: "Setup the route tables of the public subnets"
   amazon.aws.ec2_vpc_route_table:
     vpc_id: "{{ vpc_result.vpc.id }}"
     region: "{{ vpc.aws_vpc_region }}"
@@ -70,11 +58,10 @@
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ igw_result.gateway_id }}"
-
   with_items: "{{ public_subnet_result.results }}"
   register: rt_result
 
-- name: Default SG for prod subnet
+- name: "Create the default SG"
   amazon.aws.ec2_security_group:
     name: default
     description: default sg group
@@ -89,8 +76,7 @@
         cidr_ip: "{{ vpc.aws_vpc_cidrblock }}"
   register: sg_default 
 
-
-- name: start bastion 
+- name: "Create the ec2 instance used for the bastion" 
   amazon.aws.ec2_instance:
     name: "bastion"
     key_name: "ssh_key"
@@ -103,8 +89,7 @@
     image_id: ami-0c0933ae5caf0f5f9 
   register: bastion
 
-
-- name: Create new nat gateway with client token.
+- name: "Create the NAT Gateway"
   amazon.aws.ec2_vpc_nat_gateway:
     if_exist_do_not_create: true
     state: present
@@ -117,7 +102,7 @@
 - wait_for: 
     timeout: 60
 
-- name: Setup subnet route table
+- name: "Create the route tables for the private subnets"
   amazon.aws.ec2_vpc_route_table:
     vpc_id: "{{ vpc_result.vpc.id }}"
     region: "{{ vpc.aws_vpc_region }}"
@@ -131,7 +116,7 @@
   with_items: "{{ private_subnet_result.results }}"
   register: rt_result_private
 
-- name: "Create vpc endpoint for com.amazonaws.{{vpc.aws_vpc_region}}.s3"
+- name: "Create the VPC endpoint for com.amazonaws.{{vpc.aws_vpc_region}}.s3"
   amazon.aws.ec2_vpc_endpoint:
     state: present
     vpc_id: "{{ vpc_result.vpc.id }}"
@@ -140,7 +125,7 @@
     route_table_ids:
       - "{{ rt_result_private.results[0].route_table.id }}"
 
-- name: "Create vpc endpoint for com.amazonaws.{{vpc.aws_vpc_region}}.elasticloadbalancing"
+- name: "Create the VPC endpoint for com.amazonaws.{{vpc.aws_vpc_region}}.elasticloadbalancing"
   amazon.aws.ec2_vpc_endpoint:
     state: present
     vpc_id: "{{ vpc_result.vpc.id }}"
@@ -151,7 +136,7 @@
     vpc_endpoint_security_groups: "{{ sg_default.group_id }}"
   with_items: "{{ private_subnet_result.results }}"
 
-- name: "Create vpc endpoint for com.amazonaws.{{vpc.aws_vpc_region}}.ec2"
+- name: "Create the VPC endpoint for com.amazonaws.{{vpc.aws_vpc_region}}.ec2"
   amazon.aws.ec2_vpc_endpoint:
     state: present
     vpc_id: "{{ vpc_result.vpc.id }}"
