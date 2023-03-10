@@ -103,3 +103,58 @@ Run ansible:
 ansible-playbook destroy_objects.yaml
 ```
 
+example install-config.yaml for a private cluster
+----------------
+
+
+```sh
+additionalTrustBundlePolicy: Proxyonly
+apiVersion: v1
+baseDomain: test.internal 
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  platform:
+    aws:
+      zones:
+      - eu-central-1a
+      - eu-central-1b
+      - eu-central-1c
+      type: m5.2xlarge
+  replicas: 3
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform:
+    aws:
+      zones:
+      - eu-central-1a
+      - eu-central-1b
+      - eu-central-1c
+      type: m5.2xlarge
+  replicas: 3
+metadata:
+  creationTimestamp: null
+  name: clu01
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.26.0.0/23
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region: eu-central-1
+    subnets:
+    - private-a-id
+    - private-b-id
+    - private-c-id
+publish: Internal
+pullSecret: omissis
+sshKey: omissis
+```
