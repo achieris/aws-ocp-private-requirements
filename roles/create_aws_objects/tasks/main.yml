@@ -21,7 +21,7 @@
     vpc_id: "{{ vpc_result.vpc.id }}"
     az: "{{ item.az }}"
     cidr: "{{ item.cidr }}"
-    map_public: false 
+    map_public: false
     resource_tags:
       Name: "{{ item.name }}"
   with_items: "{{ vpc.private_subnets }}"
@@ -53,7 +53,7 @@
     region: "{{ vpc.aws_vpc_region }}"
     tags:
       Name: "Public-{{ item.subnet.id }}"
-    subnets: 
+    subnets:
       - "{{ item.subnet.id }}"
     routes:
       - dest: 0.0.0.0/0
@@ -74,9 +74,9 @@
         cidr_ip: 0.0.0.0/0
       - proto: all
         cidr_ip: "{{ vpc.aws_vpc_cidrblock }}"
-  register: sg_default 
+  register: sg_default
 
-- name: "Create the ec2 instance used for the bastion" 
+- name: "Create the ec2 instance used for the bastion"
   amazon.aws.ec2_instance:
     name: "bastion"
     key_name: "ssh_key"
@@ -86,7 +86,7 @@
     security_group: default
     network:
       assign_public_ip: true
-    image_id: ami-0c0933ae5caf0f5f9 
+    image_id: "{{ ami_id }}"
   register: bastion
 
 - name: "Create the NAT Gateway"
@@ -99,7 +99,7 @@
       Name: default_nat_gateway
   register: nat_gateway
 
-- wait_for: 
+- ansible.builtin.wait_for:
     timeout: 60
 
 - name: "Create the route tables for the private subnets"
@@ -144,5 +144,5 @@
     service: "com.amazonaws.{{vpc.aws_vpc_region}}.ec2"
     vpc_endpoint_type: "Interface"
     vpc_endpoint_subnets: ["{{ item.subnet.id }}"]
-    vpc_endpoint_security_groups: "{{ sg_default.group_id }}"    
+    vpc_endpoint_security_groups: "{{ sg_default.group_id }}"
   with_items: "{{ private_subnet_result.results }}"
