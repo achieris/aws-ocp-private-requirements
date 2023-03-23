@@ -12,6 +12,7 @@ The role create_aws_objects creates:
  - 6 route tables
  - 3 VPC endpoints
  - 1 default security group ( 22 for world and all traffic for VPC cidr).
+ - 1 EC2 instance (bastion host)
 
 The role destroy_aws_objects deletes all the previously listed resources.
 
@@ -34,7 +35,8 @@ create_aws_objects role variables
 In create_aws_objects/vars/main.yml
 
 ```sh
-ssh_key: 'ssh-key'
+ssh_key: '' # Add the SSH public Key that will be used during OCP installation
+ami_id: '' # Add the AMI ID that will be used for the EC2 instance (bastion host)
 
 vpc:
   aws_vpc_name: "example-vpc-1"
