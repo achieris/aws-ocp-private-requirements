@@ -21,6 +21,8 @@ Requirements
 ------------
 Tested with Ansible 2.13.3
 
+Required amazon.aws collection.
+
 Required python modules: 
 
 ```sh
